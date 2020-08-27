@@ -1,0 +1,5 @@
+dependencies:
+- nbgitpuller
+- matplotlib
+- numpy
+- pandas
