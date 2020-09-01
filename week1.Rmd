@@ -1,8 +1,8 @@
 ---
-title: "TITLE"
-subtitle: "SUBTITLE"
-author: "AUTHOR"
-date: "Last knitted `r format(Sys.Date(), '%d %b %Y')`"
+title: "week1 Problem Set"
+subtitle: "draft 1"
+author: "Stephanie Plaza-Torres"
+date: "Last knitted `r format(Sys.Date(), '%d %b %Y')`" # check what to do with this
 output:
   html_document: 
     df_print: paged
@@ -14,5 +14,140 @@ output:
 editor_options:
   chunk_output_type: inline
 ---
-
+# use tidyverse package
 > Click into a code cell (the gray blocks below) to select or edit it. To run a selected code cell, hit `Ctrl`+`Shift`+`Enter` (Windows & Linux) / `Command`+`Shift`+`Enter` (MacOS). Make sure that each code cell runs successfully before you move on to the next one.
+
+# Avogadro's Law
+
+## Learning goals
+
+After doing this exercise you should be able to:
+
+1. Define what each variable of Avogadro's Law stands for.
+2. Derive the $k$ constant from the Ideal Gas Law.
+3. Show that the volume of a gas is directly proportional to the number of moles of gas present in the sample.
+4. Calculate the volume of gas given a certain quantity of moles (when pressure and temperature are constant).
+
+## Background
+
+*Avogadro's Law was hypothesized by Amedeo Avogadro in 1812.*
+
+Avogadro's Law states that:
+
+> Equal volumes of any gas, at the same temperature and pressure, contain the same number of molecules.
+
+In this statement the **number of molecules** refers to the **number of moles**. Moles measure the amount of a substance.
+
+>This implies that the volume of a gas, kept at a constant temperature and pressure, is directly proportional to the number of moles of gas present in the sample. 
+
+You can express Avogadro's Law mathematically.
+
+-The volume of a gas is directly proportional to the moles of that gas:
+
+$$
+V\ \propto n\
+$$
+- Which can also be expressed like:
+
+$$
+\begin{align}
+\frac{V}{n} & = k\\
+\\
+V & = k \times n\
+\end{align}
+$$
+or 
+
+$$
+\frac{V_{1}}{n_{1}}\ = \frac{V_{2}}{n_{2}}\ 
+$$
+where $n$ is the number of moles of gas, $V$ is the volume of gas in liters, and $k$ is a constant that can be calculated.
+
+## Examples
+
+You can calculate the $k$ constant by deriving it from the ideal gas law equation where $P$ is pressure in pascals, $R$ is the gas constant, and $T$ is the Kelvin temperature:
+
+$$
+PV\ = nRT\
+$$
+- If you solve for $\frac{V}{n}$ you'll have:
+
+$$
+\begin{align}
+\frac{V}{n}\ = \frac{RT}{P}\\
+\\
+k = \frac{RT}{P}\\
+\end{align}
+$$
+which shows that the $k$ constant is for a fixed temperature and pressure of a gas.
+
+So, given the formula above let's calculate $k$:
+
+```{r include = FALSE}
+calc_k_list <- list(R=8.314, T=80, P=20)
+names(calc_k_list)
+```
+
+If $R$ is 8.314 J/mol⋅K, $T$ is 80 Kelvin, and $P$ is 20 Pascals:
+
+$$
+k = \frac{8.314 \times 80}{20}\\
+$$
+
+```{r}
+k <- (calc_k_list$R*calc_k_list$T)/calc_k_list$P
+```
+
+$k$ equals 
+```{r}
+print (k)
+print ("J/mol⋅Pascal")
+```
+
+If we use the above $k$ constant we can show that if the moles of gas increase, in the constant $T$ and $P$ shown above, the volume increases. Let's apply the $k$ from above to calculate what would be the volume of 1 mole of oxygen gas versus 2 moles of oxygen gas.
+
+If we have 1 mol of oxygen gas the volume would be:
+
+$$
+\begin {align}
+V & = 33.256 \times 1\ \\
+V & = 33.256\ liters
+\end{align}
+$$
+But if we have 2 mol of oxygen gas the volume would be:
+
+$$
+\begin {align}
+V & = 33.256 \times \ \\
+V & = 66.512\ liters
+\end{align}
+$$
+
+Another example: 
+
+If 6 liters have 3 mol of hydrogen gas then how many liters 6 mol of hydrogen gas have?
+
+We know $V_{1}$ is 6 liters, that $n_{1}$ is 3 moles, and that $n_{2}$ is 6 moles. We are missing our final volume which is $V_{2}$. If we solve for $V_{2}$:
+
+$$
+\begin{align}
+\frac{6\ liters}{3\ mol}\  = \frac{V_{2}}{6\ mol}\\
+\\
+V_2 = \frac{6\ liters\times 6\ mol}{3\ mol}\\
+\\
+V_2 = 12\ liters
+\end{align}
+$$
+We can see that $V_{2}$ is larger than $V_{1}$ because it contains more moles of gas.
+
+## Questions
+
+Q1. What does $V_{2}$ mean in the context of this equation:
+$$
+\frac{V_{1}}{n_{1}}\ = \frac{V_{2}}{n_{2}}\ 
+$$
+Q2. If you have a 22 liters of oxygen gas that contain 3 mol of oxygen, how many mol of gas would 30 liters of oxygen have?
+
+Q3. What happens (to the mol value) if the volume of a gas increases and the temperature and pressure remain constant?
+
+Q4. What are the two variables that should remain constant to comply with Avogadro's Law?
