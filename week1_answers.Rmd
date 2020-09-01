@@ -8,7 +8,7 @@ output: html_document
 
 ## Question
 
-Q1. What does \V_{2} mean in the context of this equation:
+Q1. What does $V_{2}$ mean in the context of this equation:
 $$
 \frac{V_{1}}{n_{1}}\ = \frac{V_{2}}{n_{2}}\ 
 $$
