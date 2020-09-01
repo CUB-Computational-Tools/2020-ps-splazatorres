@@ -1,0 +1,46 @@
+---
+title: "Week 1 Answer Key"
+author: "Stephanie Paza-Torres"
+date: "9/1/2020"
+output: html_document
+---
+# Questions and Answers
+
+## Question
+
+Q1. What does \V_{2} mean in the context of this equation:
+$$
+\frac{V_{1}}{n_{1}}\ = \frac{V_{2}}{n_{2}}\ 
+$$
+
+## Answer:
+
+The $V_{2}$ shows the new volume of a gas (in constant pressure and temperature) based on the initial volume and moles of the gas and the final moles of the gas. 
+
+## Question:
+
+Q2. If you have a 22 liters of oxygen gas that contain 3 mol of oxygen, how many mol of gas would 30 liters of oxygen have?
+
+## Answer
+
+```{r}
+calc_mol_list <- list(v1=8.314, n1=80, v2=20)
+n2 <- (calc_mol_list$v2*calc_mol_list$n1)/calc_mol_list$v1
+print (n2)
+```
+
+## Question
+
+Q3. What happens (to the mol value) if the volume of a gas increases and the temperature and pressure remain constant?
+
+## Answer
+
+The mol increases.
+
+## Question
+
+Q4. What are the two variables that should remain constant to comply with Avogadro's Law?
+
+## Answer
+
+The temperature and the pressure.
