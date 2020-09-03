@@ -104,8 +104,7 @@ k <- (calc_k_list$R*calc_k_list$T)/calc_k_list$P
 
 $k$ equals 
 ```{r}
-print (k)
-print ("J/mol⋅Pascal")
+cat (k, "J/mol⋅Pascal")
 ```
 <p>&nbsp;</p>
 
