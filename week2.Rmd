@@ -28,7 +28,7 @@ After doing this lesson you should be able to:
 
 ## Background
 
-Ohm's Law is a concept that focuses on the study of electrical circuits. The equation for Ohm's Law is:
+Ohm's Law is a fundamental law for the study of electrical circuits. The equation formulated by Georg Simon Ohm is:
 
 $$
 R = \frac{V}{I} 
@@ -40,7 +40,21 @@ In this equation:
 > $R$ is a measurement of how a material oposes the flow of an electric current and it is measured in Omhs. 
 > You can re-express the equation by rearranging the variables above.
 
-$R$ is controlled by all of the resistors between the two measured points used to get the electric potential difference. 
+To have an electrical current ($I$) flow through a circuit you must apply a $V$, which would mean that you need a potential difference between the two points (start point / end point) that you are measuring in your system. That way you can have free charges that are able to move from the start point of your circuit to the end point of your circuit. Since $V$ helps $I$ exist, then any changes in $V$ will affect the $I$ of a system (there is a directly proportional relationship between $V$ and $I$). If we rearrange Ohm's Law we can show this: 
+
+$$
+I = \frac{V}{R} 
+$$
+
+If $V$ becomes bigger it will drive $I$ to be bigger as well. This is possible because the $R$ or resistance you measure from the start point to the end point of the system remains constant through the circuit.
+
+$R$ is controlled by all of the resistors (the sum of them) between the two measured points used to get the electric potential difference. A resistor is an electrical component that limits the flow of an electrical current. Given so, the resistance would be a measurement of the opposition to a current flow in an electrical circuit. So, when the resistance of the circuit increases the current flowing through that system (if the potential difference or $V$ remains constant) will decrease. This is shown by the inverse proportional relationship between resistance and current:
+
+$$
+R = \frac{V}{I} 
+$$
+If $R$ increases then $I$ would have to decrease to maintain this mathematical relationship.
+
 
 <p>&nbsp;</p>
 
@@ -122,6 +136,6 @@ ________________________________________________________________________________
 
 3. What is the kind of relationship between $V$ and $I$ graphically for Ohm's Law? What does the slope represent?
 
-4. Apply your dataframe and ggplot2 knowledge. Create a dataframe using this rearranged version of Omh's Law $V=IR$. The dataframe's $R$ variable should start at 1 and end at 6, incrementing by 1 from one number to another. The $I$ variable should go from 0 to 1000 incrementing by 200. Calculate $V$ for every row in your dataframe using the equation above. Add the results of $V$ as a new column in your dataframe. Use your new $V$ values alongside the $I$ values to make a plot showing the relationship $R=V/I$.
+4. Apply your dataframe and ggplot2 knowledge. Create a dataframe using this rearranged version of Omh's Law $V=IR$. The dataframe's $R$ variable should have 6 values that are all 10 (use the rep function, see help("rep") to understand how to use it). The $I$ variable should go from 0 to 1000 incrementing by 200. Calculate $V$ for every row in your dataframe using the equation above. Add the results of $V$ as a new column in your dataframe. Use your new $V$ values alongside the $I$ values to make a plot showing the relationship $R=V/I$.
 
 
