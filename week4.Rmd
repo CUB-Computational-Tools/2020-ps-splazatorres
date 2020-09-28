@@ -1,5 +1,5 @@
 ---
-title: "Week 3 Problem Set"
+title: "Week 4 Problem Set"
 subtitle: "Introduction to Phylogenetic Trees"
 author: "Stephanie Plaza-Torres"
 date: "Last knitted `r format(Sys.Date(), '%d %b %Y')`" 
