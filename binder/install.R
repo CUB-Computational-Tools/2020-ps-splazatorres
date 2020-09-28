@@ -1,6 +1,7 @@
 # Regular packages
 install.packages(c("rmarkdown", "caTools", "bitops")) # for knitting
 install.packages("tidyverse") # for all tidyverse functionality
+install.packages(c("ape", "phytools")) # for creating phylogenetic trees
 
 # Bioconductor packages
 # install.packages("BiocManager")
