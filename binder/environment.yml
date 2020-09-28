@@ -1,2 +1,6 @@
+channels:
+- conda-forge
+- defaults
 dependencies:
 - nbgitpuller
+- imagemagick
