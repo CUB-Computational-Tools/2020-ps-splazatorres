@@ -3,3 +3,6 @@ jupyter labextension install @jupyterlab/toc
 
 # Enable nbgitpuller to pull in content
 jupyter serverextension enable --py nbgitpuller --sys-prefix
+
+# Install Image Magick
+sudo apt install imagemagick
