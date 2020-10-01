@@ -1,0 +1,244 @@
+---
+title: "Week 4 Problem Set"
+subtitle: "Introduction to Phylogenetic Trees"
+author: "Stephanie Plaza-Torres"
+date: "Last knitted `r format(Sys.Date(), '%d %b %Y')`" 
+output:
+  html_document: 
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_float: true
+    toc_depth: 3
+    code_folding: show
+editor_options:
+  chunk_output_type: inline
+---
+
+
+<p>&nbsp;</p>
+# ***Introduction to Phylogenetic Trees***
+<p>&nbsp;</p>
+
+## Learning goals
+
+After doing this lesson you should be able to:
+
+1. Construct a simple phylogenetic tree using a presence/absence of traits dataframe for example organisms.
+2. Learn how to read a phylogenetic tree, what an ancestral trait is, and what an ancestral organism is. 
+3. Import an excel file as a dataframe suing R.
+4. Assign names to columns and rows of a dataframe. 
+5. Change the value of a particular data point in a dataframe using the dataframe index for that value. 
+
+## Pre-requisites
+
+1. Basic knowledge of R programming, in particular assigning variables and knowledge of what dataframes are.
+2. Knowledge of basic biology, in particular concepts like evolution, speciation, and descent with modification.
+3. Basic knowledge of taxonomic concepts. 
+
+<p>&nbsp;</p>
+
+## Background
+
+Evolutionary trees or phylogenetic trees are a way to show the evolutionary history and the relationships of a group of organisms (which are also referred to as taxa).
+
+In a tree the ends of the tips represent a particular taxon (organism).  The nodes of a phylogenetic tree represent a common ancestor for those descendant taxa. The further down from the tip you are, the more ancestral are the species and the traits that accompany those organisms. 
+ 
+> In the example below the tips are identified with the numbers 1-4, and the nodes are identified with the numbers 5-7.
+
+```{r Example phylogenetic tree, message = FALSE, echo = FALSE}
+
+library(phytools) 
+library (ape)
+
+show_tree<-read.tree(text="((A,B),(C,D));")
+
+plotTree(show_tree,offset=.5)
+nodelabels()
+tiplabels()
+
+```
+
+Within a tree you can find **clades** which represent a group of organisms that includes an ancestor of that organism and all of its descendants. In this tree taxa A and B form a clade, and taxa C and D would form another clade.
+
+You can form a tree based of the presence and absence of traits in an organism. These traits can be genetic, morphological physiological, etc. 
+
+In a tree, you add branches and divide the lineages these branches represent based of changes in the traits of organisms. 
+
+**When we look at the example tree again:**
+```{r Plotting example tree again, echo = FALSE}
+plotTree(show_tree,offset=.5)
+nodelabels()
+tiplabels()
+```
+
+We can say that our ancestral trait, or the trait that all taxa on our tree share is at the base of the tree, and it is the only trait our most ancestral organism would have. If we look at the tips of our tree, those organisms would have the traits represented by every branch previous to the branch they are contained in.
+
+You can notice that the tree bifurcates at every node, creating two lineages (branches). As well you can observe that through the tree all of the (descendant) organisms are related through a common ancestor. 
+
+In the example, organisms A and B are related by a common ancestor at 6, but all of the organisms in the tree are related to each other through their common ancestor at node 5. 
+
+<p>&nbsp;</p>
+
+## Examples
+
+### Creating a presence/absence of traits dataframe
+
+You can make a phylogenetic tree based on a trait dataframe, where you represent the presence or absence of a certain trait in an organism as 0s and 1s. A 1 represents that the organism has a trait, meanwhile 0 represents the lack thereof. Here we will work through an example were all of the organisms share one trait in common, and where the other traits represented show the relationships between the organisms. 
+
+> First, let's make our dataframe. Our rows will represent our example organisms in letters, and the columns will show us the traits of our organisms. 
+
+```{r Create a presence/absence of trait (in an organism) dataframe}
+
+# Your dataframe will consist of columns that will represent the traits of your organisms
+# A row of your dataframe will represent the conglomerate of traits for an organism in particular
+# A zero in a trait represents the lack of that said trait. A one for a trait represents that the organism possesses that trait.
+
+df_size <- 5 # Determines the number of rows and columns of your dataframe. Note: Number of rows will be the same as number of columns.
+
+trait_df <- data.frame(replicate(df_size,rep(1,df_size))) # trait_df is your presence/absence dataframe
+# replicate has two arguments here: df_size represents the number of times that it will repeat the vector created by rep(1, df_size)
+# data.frame will create a dataframe with the vectors created using replicate
+# each vector will become a column of your dataframe
+# look in R's help to understand the rep function
+# try changing the values of this line of code to understand better how it behaves
+
+trait_df[lower.tri(trait_df)] <- 0
+trait_df <- trait_df[,sample(ncol(trait_df))]
+
+colnames(trait_df) <- c("Trait 1", "Trait 2", "Trait 3", "Trait 4", "Trait 5") 
+# Assigns headers to dataframe columns. Here we are naming columns to represent trait numbers. Notice this, as it will be part of your assessment questions.
+
+rownames(trait_df) <- c("A", "B", "C", "D", "E" ) 
+# Assigns headers to dataframe rows. Here we are naming rows to represent each organism with a letter. Notice this, as it will be part of your assessment questions.
+```
+
+`trait_df[1,2] <- "YES"`  # Changes the value in row 1, column 2 of your dataframe to a string indicating "YES". We could change all the 0 and 1 values (to NO and YES respectively) in the dataframe using this kind of code, but it is highly inefficient. Below I have created a function that does this automatically (to some extent) to all of the values of the dataframe. 
+
+```{r Create a presence/absence of trait (in an organism) dataframe - CONTINUED}
+trait_df # Shows you your trait dataframe. Use this to double-check your dataframe has everything you intended it to have
+
+convert_df_yes_no <- function(data_frame, matrix_size){
+  
+  for (j in 1:matrix_size){
+    for (i in 1:matrix_size) {
+      if (data_frame[i,j] == 1) { 
+        data_frame[i,j]="YES"
+        }
+      else { 
+        data_frame[i,j]="NO"
+      }
+    }#end for index i
+  }#end for index j
+
+  return(data_frame)
+}#end function_convert_df_yes_no
+
+trait_df_yn = convert_df_yes_no(trait_df, df_size)
+trait_df_yn
+
+```
+
+At the end of this chunk of code you can see the printed dataframe. 
+
+### Creating a phylogenetic tree based on the presence/absence dataframe
+
+Now, let's work with it. First, group all the lineages of organisms that share a trait. Second, once you make these groups check if every group that you circled can be a subset of another group you circled. 
+
+When you look at the traits, the ancestral trait should be the one that all organisms share. What do you think this trait could be? Also, what do you think the ancestral organism should be? It should have the trait all of the organisms share, but have the simplest trait composition. 
+
+Below are the answers. These should help as a hint to build your tree.
+
+```{r Determine ancestral trait, echo = FALSE}
+
+ancestral_trait_org <- function(data_frame, matrix_size){
+  
+  trait <- 1  
+  sum_of_trait <- 0 
+  i <- 1
+  organism <- 1  
+  sum_of_orgtrait <- 0 
+  j <- 1
+  
+  while (trait <= matrix_size) {
+    for (i in 1:matrix_size) {
+        sum_of_trait <- data_frame[i,trait] + sum_of_trait
+    }#end for 
+    if (sum_of_trait == matrix_size) { 
+        ancestral_trait <- colnames(trait_df)[trait]
+        break
+    } else { 
+          trait <- trait + 1 
+          sum_of_trait <- 0
+    }
+  }#end while trait
+
+  while (organism <= matrix_size) {
+    for (j in 1:matrix_size) {
+        sum_of_orgtrait <- data_frame[organism, j] + sum_of_orgtrait
+    } 
+    if (sum_of_orgtrait == 1) { 
+        ancestral_org <- rownames(trait_df)[organism]
+        break
+    } else { 
+          organism <- organism + 1 
+          sum_of_orgtrait <- 0
+    }
+  }#end while organism
+  
+  return(cat("The ancestral trait is:", ancestral_trait, "\nThe ancestral organism is:", ancestral_org))
+}#end function ancestral_trait_org
+
+ancestral_trait_org(trait_df, df_size)
+
+```
+
+Based on the information you have above, build your own tree using the dataframe and compare it to the tree below. The tree below shows the phylogenetic relationships between the organisms in this example.
+
+```{r Resulting phylogenetic tree for trait_df, echo = FALSE}
+
+trait_sums <- colSums(trait_df)
+sorted_traits <- sort(trait_sums)
+
+library(phytools) 
+library (ape)
+
+example_tree<-read.tree(text="(((((A),B),C),D),E);")
+
+plotTree(example_tree,offset=.5)
+
+nodelabels(names(sorted_traits[5]), c(6))
+nodelabels(names(sorted_traits[1:4]), c(10,9,8,7), adj = c(2.5, 0.5))
+
+```
+
+### Loading a data for a presence/absence dataframe using Excel
+
+Besides making your own dataframe, you can import your presence/absence matrix from an excel file. Below is the code that accomplishes that: 
+
+```{r  Loading an Excel file, message = FALSE}
+library(tidyverse)
+library(readxl)
+
+sample_tree_data <- data.frame(read_excel("data/sample_tree_data.xlsx")) # Reads your excel file and turns it into a dataframe
+
+colnames(sample_tree_data) <- c("Trait 1", "Trait 2", "Trait 3", "Trait 4", "Trait 5") 
+rownames(sample_tree_data) <- c("A", "B", "C", "D", "E") 
+
+
+sample_tree_data
+```
+Now that you have gone over how to make evolutionary trees and learned some code on dataframes and data import, let's assess your knowledge.
+
+<p>&nbsp;</p>
+___________________________________________________________________________________________________________
+
+## Questions
+
+1. Look at the `sample_tree_data.xlsx` file. Edit the file to create your own presence/absence matrix (it should have 6 traits and 6 organisms), and name it something with your initials at the end. Once you do this, load the file into R, make it a dataframe, asssign it to a variable, and put column and row headers to it. The dataframe should be named `my_matrix`. 
+
+2. What do phylogenetic trees illustrate? What is a clade?
+
+3. Construct a presence/absence dataframe (you don't need to code it into R) that would create the first example phylogenetic tree of the background section of this lesson.
+
+4. Change the contents of the data in the third column and third row of your `mymatrix` dataframe to either "YES" or "NO", where "YES" would be for a 1 value and "NO" would be for a 0 value. 
